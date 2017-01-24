@@ -10,12 +10,29 @@
      margin-top: 20px;
      flex-direction: column;
      border-top:1px solid $pf-black-200;
+
+     .form-group {
+       display: flex;
+       align-items: center;
+     }
      .control-label,
      .delete-volume-container {
        text-align: left;
      }
      .common-checkbox {
        text-align: left;
+     }
+
+     .common-numericInput {
+       .react-numeric-input {
+       display: flex !important;
+
+       input {
+         flex: 1;
+         height: 28px;
+       }
+
+       }
      }
   }
 }

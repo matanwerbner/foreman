@@ -73,10 +73,6 @@ module ComputeResourcesVmsHelper
     select
   end
 
-  def vsphere_datastores(compute)
-    compute.datastores.map { |datastore| { datastore.name => datastore_stats(datastore)} }
-  end
-
   def vsphere_networks(compute_resource)
     networks = compute_resource.networks
     networks.map do |net|
@@ -92,8 +88,18 @@ module ComputeResourcesVmsHelper
     "#{datastore.name} (#{_('free')}: #{number_to_human_size(datastore.freespace)}, #{_('prov')}: #{number_to_human_size(datastore.capacity + (datastore.uncommitted || 0) - datastore.freespace)}, #{_('total')}: #{number_to_human_size(datastore.capacity)})"
   end
 
+  def vsphere_datastores(compute)
+    compute.datastores.inject({}) do |hsh, datastore|
+      hsh[datastore.name] = datastore_stats(datastore)
+      hsh
+    end
+  end
+
   def vsphere_storage_pods(compute)
-    compute.storage_pods.map { |pod| { pod.name => storage_pod_stats(pod) } }
+    compute.storage_pods.inject({}) do |hsh, pod|
+      hsh[pod.name] = storage_pod_stats(pod)
+      hsh
+    end
   end
 
   def storage_pod_stats(pod)
@@ -218,6 +224,8 @@ module ComputeResourcesVmsHelper
     scsi_controllers = {}
     compute.scsi_controller_types.each { |type| scsi_controllers[type[:key]] = type[:title] }
     scsi_controllers
+  end
+
   def new_vm?(host)
     return true unless host.present?
     return true unless host.compute_object.present?

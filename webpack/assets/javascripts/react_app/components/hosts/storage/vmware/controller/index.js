@@ -2,7 +2,7 @@ import React from 'react';
 import { Button } from 'react-bootstrap';
 import Disk from './disk';
 import './controller.scss';
-
+import Select from '../../../../common/forms/Select';
 const Controller = (
   {
     addDiskEnabled,
@@ -12,38 +12,35 @@ const Controller = (
     updateDisk,
     ControllerTypes,
     controller,
-    removeController
+		controllerVolumes,
+    removeController,
+    config
   }
 ) => {
-  const getEventValue = e =>
-    e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  const getEventValue = e => {
+    if (!e.target) {
+      return e;
+    }
+    return e.target.type === 'checkbox' ? e.target.checked : e.target.value;
+  };
 
   const _updateController = (attribute, e) => {
     updateController({ [attribute]: getEventValue(e) });
   };
 
-  const _updateDisk = (diskIndex, attribute, e) => {
-    updateDisk(diskIndex, { [attribute]: getEventValue(e) });
-  };
-
-  const selectableTypes = () => {
-    return Object.entries(ControllerTypes).map(attribute => {
-      return (
-        <option key={attribute[0]} value={attribute[0]}>{attribute[1]}</option>
-      );
-    });
+  const _updateDisk = (uuid, attribute, e) => {
+    updateDisk(uuid, { [attribute]: getEventValue(e) });
   };
 
   const disks = () => {
-    return controller.disks.map((disk, index) => {
+    return controllerVolumes.map((disk) => {
       return (
         <Disk
-          key={index}
-          id={index}
-          updateDisk={_updateDisk.bind(this, index)}
-          removeDisk={removeDisk.bind(this, index)}
-          datastores={controller.datastores}
-          storagePods={controller.storage_pods}
+          key={disk.uuid}
+          id={disk.uuid}
+          updateDisk={_updateDisk.bind(this, disk.uuid)}
+          removeDisk={removeDisk.bind(this, disk.uuid)}
+          config={config}
           {...disk}
         />
       );
@@ -52,19 +49,14 @@ const Controller = (
 
   return (
     <div className="controller-container">
-      <div className="controller-header">
+    <div className="controller-header">
         <div className="control-label col-md-2 controller-selected-container">
           <label>{__('Create SCSI controller')}</label>
         </div>
         <div className="controller-type-container col-md-4">
-          <select
-            className="form-control select-controller-type"
-            value={controller.type}
-            onChange={_updateController.bind(this, 'type')}
-          >
-            <option value="">{__('Please select')}</option>
-            {selectableTypes()}
-          </select>
+          <Select value={controller.type}
+                  onChange={_updateController.bind(this, 'type')}
+                  options={config.controllerTypes} />
           <Button
             className="btn-add-disk"
             disabled={!addDiskEnabled}

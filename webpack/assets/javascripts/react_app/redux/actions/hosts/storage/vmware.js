@@ -7,34 +7,33 @@ import {
   STORAGE_VMWARE_UPDATE_DISK,
   STORAGE_VMWARE_INIT
 } from '../../../consts';
-import {
-  defaultConrollerAttributes,
-  getDefaultDiskAttributes
-} from './vmware.consts';
+import {defaultConrollerAttributes, getDefaultDiskAttributes} from './vmware.consts';
 
-export const updateDisk = (controllerIdx, diskIdx, newValues) => ({
-  type: STORAGE_VMWARE_UPDATE_DISK,
-  payload: {
-    controllerIdx,
-    diskIdx,
-    newValues
-  }
-});
+export const updateDisk = (uuid, newValues) => {
+  return {
+    type: STORAGE_VMWARE_UPDATE_DISK,
+    payload: {
+      uuid,
+      newValues
+    }
+  };
+};
 
-const defaultPayload = defaultData => ({
-  disks: [Object.assign({}, getDefaultDiskAttributes())],
-    ...defaultData,
-    ...defaultConrollerAttributes
-});
-
-export const initController = data => ({
+export const initController = (config, controllers, volumes) => ({
   type: STORAGE_VMWARE_INIT,
-  payload: defaultPayload(data)
+  payload: {
+    config,
+    controllers: controllers || defaultConrollerAttributes,
+    volumes: volumes || getDefaultDiskAttributes()
+  }
 });
 
 export const addController = data => ({
   type: STORAGE_VMWARE_ADD_CONTROLLER,
-  payload: defaultPayload(data)
+  payload: {
+    controller: defaultConrollerAttributes,
+    volumes: getDefaultDiskAttributes()
+  }
 });
 
 export const updateController = (idx, newValues) => ({
@@ -45,23 +44,22 @@ export const updateController = (idx, newValues) => ({
   }
 });
 
-export const removeDisk = (controllerIdx, diskIdx) => ({
+export const removeDisk = uuid => ({
   type: STORAGE_VMWARE_REMOVE_DISK,
   payload: {
-    controllerIdx,
-    diskIdx
+    uuid
   }
 });
 
-export const removeController = (idx) => ({
+export const removeController = controllerKey => ({
   type: STORAGE_VMWARE_REMOVE_CONTROLLER,
-  payload: { idx }
+  payload: {controllerKey}
 });
 
-export const addDisk = idx => ({
+export const addDisk = controllerKey => ({
   type: STORAGE_VMWARE_ADD_DISK,
   payload: {
-    idx,
+    controllerKey,
     data: getDefaultDiskAttributes()
   }
 });

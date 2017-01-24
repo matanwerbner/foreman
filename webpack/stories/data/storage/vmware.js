@@ -1,5 +1,4 @@
 /* eslint-disable */
-
 export const vmwareData = {
   config: {
     controllerTypes: {
@@ -10,8 +9,8 @@ export const vmwareData = {
     },
     diskModeTypes: {
       persistent: 'Persistent',
-      independent_persistent: 'Independent - Persistent',
-      independent_nonpersistent: 'Independent - Nonpersistent'
+      'independent_persistent': 'Independent - Persistent',
+      'independent_nonpersistent': 'Independent - Nonpersistent'
     },
     storagePods: {StorageCluster: 'StorageCluster (free: 1.01 TB, prov: 7.49 TB, total: 8.5 TB)'},
     datastores: {
@@ -42,18 +41,4 @@ export const vmwareData = {
     }
   ],
   controllers: [{type: 'VirtualLsiLogicController', key: 1000}]
-};
-
-export const hiddenFieldValue = {
-  scsiControllers: [{key: 1000, type: 'VirtualLsiLogicController'}],
-  volumes: [
-    {
-      controller_key: 1000,
-      mode: 'persistent',
-      name: 'Hard disk',
-      size: 10485760,
-      size_gb: 10,
-      thin: true
-    }
-  ]
 };

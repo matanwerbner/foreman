@@ -19,6 +19,6 @@ describe('StorageContainer', () => {
 
     expect(
       wrapper.find('.text-vmware-size').props().value
-    ).toEqual('10');
+    ).toEqual(10);
   });
 });
