@@ -1,7 +1,4 @@
-import ServerActions from './actions/ServerActions';
-import NotificationActions from './actions/NotificationActions';
-import { STATUS } from './constants';
-import $ from 'jquery';
+const $ = require('jquery');
 
 export default {
   get(url) {
@@ -10,29 +7,15 @@ export default {
     });
     return $.getJSON(url);
   },
-  getNotifications(url) {
-    NotificationActions.setRequestStatus(STATUS.PENDING);
-    $.get(url)
-      .success(
-        (response, textStatus, jqXHR) => {
-          ServerActions.receivedNotifications(response, textStatus, jqXHR);
-        })
-      .error((jqXHR, textStatus, errorThrown) => {
-        ServerActions.notificationsRequestError(jqXHR, textStatus, errorThrown);
-      });
-  },
-  markNotificationAsRead(url) {
+  markNotificationAsRead(id) {
     const data = JSON.stringify({'seen': true});
 
     $.ajax({
-      url: url,
+      url: `/notification_recipients/${id}`,
       contentType: 'application/json',
       type: 'put',
       dataType: 'json',
       data: data,
-      success: function (response, textstatus, jqXHR) {
-        ServerActions.notificationMarkedAsRead(response, textstatus, jqXHR);
-      },
       error: function (jqXHR, textStatus, errorThrown) {
         console.log(jqXHR);
       }

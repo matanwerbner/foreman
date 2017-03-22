@@ -44,6 +44,11 @@ export function activateTooltips(el = 'body') {
                                    }
                               });
   el.find('*[title]').not('*[rel]').tooltip({ container: 'body' });
+
+  // adding this to remove displayed tooltips for react-initiated
+  // calls to this function (no page:restore fired).
+  $('.tooltip.in').remove();
+
   $(document).on('page:restore', () => {$('.tooltip.in').remove();});
 }
 
