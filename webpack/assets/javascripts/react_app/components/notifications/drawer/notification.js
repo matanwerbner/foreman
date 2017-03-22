@@ -5,6 +5,7 @@ import NotificationDropdown from './NotificationDropdown';
 import '../../../common/commonStyles.css';
 
 /* eslint-disable camelcase */
+
 const Notification = (
   {
     notification: {
