@@ -108,7 +108,7 @@ export const fullHtml = '<div id="notifications_container">' +
 'class="notification-text-container"><span ' +
 'class="drawer-pf-notification-message">Hi! This is a ' +
 'notification message</span><div class="drawer-pf-notification-info">' +
-'<span class="date">3/14/17</span><span class="time">03:25:07 PM' +
+'<span class="date">3/14/2017</span><span class="time">11:25:07 AM' +
 '</span></div></div><div class="dropdown-kebab-pf dropdown btn-group">' +
 '<button id="6" role="button" aria-haspopup="true" ' +
 'aria-expanded="false" type="button" class="dropdown-toggle btn ' +

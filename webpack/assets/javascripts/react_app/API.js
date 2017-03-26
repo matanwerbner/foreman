@@ -5,7 +5,7 @@ export default {
     $.ajaxPrefilter(function (options, originalOptions, jqXHR) {
       jqXHR.originalRequestOptions = originalOptions;
     });
-    return $.getJSON(url);
+    return $.getJSON(`${url}?per_page=100`);
   },
   markNotificationAsRead(id) {
     const data = JSON.stringify({'seen': true});

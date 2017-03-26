@@ -7,12 +7,11 @@ class NotificationRecipientsController < Api::V2::BaseController
   def index
     @notifications = NotificationRecipient.
       where(:user_id => User.current.id, :notification_id => Notification.active).
-      order(:created_at).
+      order(created_at: :desc).
       eager_load(:notification, :notification_blueprint)
 
     render :json => {
-      :notifications => @notifications.paginate(paginate_options).map(&:payload),
-      :total => @notifications.count
+      :notifications => @notifications.paginate(paginate_options).map(&:payload)
     }
   end
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import Notification from './notification';
-import { orderBy, reverse } from 'lodash';
 
 export default (
   {
@@ -32,7 +31,7 @@ export default (
         isExpanded &&
         <div className="panel-body">
           {
-            reverse(orderBy(notifications, 'created_at')).map(
+            notifications.map(
               notification => (
                 <Notification
                   key={notification.id}

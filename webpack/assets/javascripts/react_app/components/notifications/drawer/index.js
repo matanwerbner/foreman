@@ -26,14 +26,14 @@ export default (
     ));
   const noNotificationsMessage = (
     <div id="no-notifications-container">
-      { NO_NOTIFICATIONS_MESSAGE }
+      { __(NO_NOTIFICATIONS_MESSAGE) }
     </div>
   );
 
   return (
     <div className="drawer-pf drawer-pf-notifications-non-clickable">
       <div className="drawer-pf-title">
-        <h3 className="text-center">{ NOTIFICATIONS_TITLE }</h3>
+        <h3 className="text-center">{ __(NOTIFICATIONS_TITLE) }</h3>
       </div>
       <div className="panel-group" id="notification-drawer-accordion">
         {groups.length === 0 ? noNotificationsMessage : groups}

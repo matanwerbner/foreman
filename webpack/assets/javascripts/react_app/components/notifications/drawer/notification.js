@@ -1,6 +1,5 @@
 import React from 'react';
 import Icon from '../../common/Icon';
-import moment from 'moment';
 import NotificationDropdown from './NotificationDropdown';
 import '../../../common/commonStyles.css';
 
@@ -19,7 +18,7 @@ const Notification = (
     onMarkAsRead
   }
 ) => {
-  const created = moment.utc(created_at);
+  const created = new Date(created_at);
   const title = __('Click to mark as read').toString();
   const tooltip = {
     title: title,
@@ -41,8 +40,8 @@ const Notification = (
       <div className="notification-text-container">
       {markup}
       <div className="drawer-pf-notification-info">
-        <span className="date">{created.format('M/D/YY')}</span>
-        <span className="time">{created.format('hh:mm:ss A')}</span>
+        <span className="date">{created.toLocaleDateString()}</span>
+        <span className="time">{created.toLocaleTimeString()}</span>
       </div>
       </div>
       {actions.links && <NotificationDropdown links={actions.links} id={id} />}
