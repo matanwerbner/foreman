@@ -3,7 +3,7 @@ import { shallow, mount } from 'enzyme';
 import Notifications from './';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
-import { getNewStore } from '../../redux';
+import Store from '../../redux';
 import {
   emptyState,
   emptyHtml,
@@ -56,42 +56,39 @@ describe('notifications', () => {
     expect(box.render().html()).toEqual(fullHtml);
   });
 
-  it(
-    'should display full bell on a state with unread notifications',
-    () => {
-      const store = mockStore(stateWithUnreadNotifications);
-      const box = shallow(<Notifications store={store} />);
+  it('should display full bell on a state with unread notifications', () => {
+    const store = mockStore(stateWithUnreadNotifications);
+    const box = shallow(<Notifications store={store} />);
 
-      expect(box.render().find('.fa-bell').length).toBe(1);
-    }
-  );
+    expect(box.render().find('.fa-bell').length).toBe(1);
+  });
 
   it('full flow', done => {
-    const store = getNewStore();
     const data = { url: '/notification_recipients' };
-    const wrapper = mount(<Notifications data={data} store={store} />);
+    const wrapper = mount(<Notifications data={data} store={Store} />);
 
-    // empty bell is rendered
     expect(wrapper.render().find('.fa-bell-o').length).toBe(1);
-
-    // this tests the component after re-render
     setTimeout(() => {
-        const rendered = wrapper.render();
+      const rendered = wrapper.render();
 
-        // full bell is rendered
-        expect(rendered.find('.fa-bell').length).toBe(1);
-        wrapper.find('.fa-bell').simulate('click');
-        expect(
-          rendered.find('.panel-group').length
-        ).toEqual(0);
+      // full bell is rendered
+      expect(rendered.find('.fa-bell').length).toBe(1);
+      wrapper.find('.fa-bell').simulate('click');
+      expect(rendered.find('.panel-group').length).toEqual(0);
 
+      setTimeout(() => {
+        // a panel group is rendered (inside the accordion)
+        expect(wrapper.find('.panel-group').length).toEqual(1);
+        wrapper.find('.panel-group .panel-heading').simulate('click');
         setTimeout(() => {
-          // a panel group is rendered (inside the accordion)
-          expect(
-            wrapper.render().find('.panel-group').length
-          ).toEqual(1);
-          done();
+          expect(wrapper.find('.not-seen').length).toEqual(1);
+          wrapper.find('.not-seen').simulate('click');
+          setTimeout(() => {
+            expect(wrapper.find('.not-seen').length).toEqual(0);
+            done();
+          });
         });
       });
+    });
   });
 });

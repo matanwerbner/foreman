@@ -8,12 +8,17 @@ import { notificationsDrawer } from '../../../common/sessionStorage';
 import API from '../../../API';
 
 export const getNotifications = url => dispatch => {
-  API.get(url).then(response => dispatch({
-    type: NOTIFICATIONS_GET_NOTIFICATIONS,
-    payload: {
-      notifications: response.notifications
-    }
-  }));
+  if (
+    document.visibilityState === 'visible' ||
+    document.visibilityState === 'prerender'
+  ) {
+    API.get(url).then(response => dispatch({
+      type: NOTIFICATIONS_GET_NOTIFICATIONS,
+      payload: {
+        notifications: response.notifications
+      }
+    }));
+  }
 };
 
 export const onMarkAsRead = (group, id) => dispatch => {

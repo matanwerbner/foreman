@@ -9,12 +9,8 @@ if (process.env.NODE_ENV !== 'production') {
   middleware = [...middleware, createLogger()];
 }
 
-const _createStore = () => createStore(
+export default createStore(
   reducer,
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__(),
   applyMiddleware(...middleware)
 );
-
-export default _createStore();
-
-export const getNewStore = _createStore;
