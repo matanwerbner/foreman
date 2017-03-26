@@ -5,7 +5,6 @@ import './notifications.scss';
 import ToggleIcon from './toggleIcon/';
 import Drawer from './drawer/';
 import { groupBy, some, isUndefined } from 'lodash';
-import { getNotificationsInterval } from './notifications.consts';
 
 class notificationContainer extends React.Component {
   componentDidUpdate() {
@@ -14,19 +13,8 @@ class notificationContainer extends React.Component {
 
   componentDidMount() {
     const { getNotifications, data: { url } } = this.props;
-    const timerId = setInterval(
-      getNotifications.bind(this, url),
-      getNotificationsInterval
-    );
 
     getNotifications(url);
-    this.setState({
-      timerId
-    });
-  }
-
-  componentWillUnmount() {
-    clearInterval(this.state.timerId);
   }
 
   render() {

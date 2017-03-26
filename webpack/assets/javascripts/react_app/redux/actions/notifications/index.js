@@ -6,18 +6,25 @@ import {
 } from '../../consts';
 import { notificationsDrawer } from '../../../common/sessionStorage';
 import API from '../../../API';
+const getNotificationsInterval = 10000;
 
 export const getNotifications = url => dispatch => {
   if (
     document.visibilityState === 'visible' ||
     document.visibilityState === 'prerender'
   ) {
-    API.get(url).then(response => dispatch({
-      type: NOTIFICATIONS_GET_NOTIFICATIONS,
-      payload: {
-        notifications: response.notifications
-      }
-    }));
+    API.get(url).then(response => {
+      dispatch({
+        type: NOTIFICATIONS_GET_NOTIFICATIONS,
+        payload: {
+          notifications: response.notifications
+        }
+      });
+      setTimeout(
+        () => dispatch(getNotifications(url)),
+        getNotificationsInterval
+      );
+    });
   }
 };
 
