@@ -9,7 +9,6 @@ import {
   emptyHtml,
   stateWithoutNotifications,
   stateWithNotifications,
-  fullHtml,
   stateWithUnreadNotifications,
   serverResponse
 } from './notifications.fixtures';
@@ -46,14 +45,16 @@ describe('notifications', () => {
 
     const box = shallow(<Notifications store={store} />);
 
-    expect(box.render().html()).toEqual(emptyHtml);
+    expect(box.render().find('.drawer-pf').length).toEqual(0);
   });
 
   it('should render full html on a state with notifications', () => {
     const store = mockStore(stateWithNotifications);
     const box = shallow(<Notifications store={store} />);
 
-    expect(box.render().html()).toEqual(fullHtml);
+    expect(
+      box.render().find('.drawer-pf-notification').length
+    ).toEqual(1);
   });
 
   it('should display full bell on a state with unread notifications', () => {
@@ -67,28 +68,32 @@ describe('notifications', () => {
     const data = { url: '/notification_recipients' };
     const wrapper = mount(<Notifications data={data} store={Store} />);
 
-    expect(wrapper.render().find('.fa-bell-o').length).toBe(1);
-    setTimeout(() => {
-      const rendered = wrapper.render();
-
-      // full bell is rendered
-      expect(rendered.find('.fa-bell').length).toBe(1);
-      wrapper.find('.fa-bell').simulate('click');
-      expect(rendered.find('.panel-group').length).toEqual(0);
-
+    try {
+      expect(wrapper.render().find('.fa-bell-o').length).toBe(1);
       setTimeout(() => {
-        // a panel group is rendered (inside the accordion)
-        expect(wrapper.find('.panel-group').length).toEqual(1);
-        wrapper.find('.panel-group .panel-heading').simulate('click');
+        const rendered = wrapper.render();
+
+        // full bell is rendered
+        expect(rendered.find('.fa-bell').length).toBe(1);
+        wrapper.find('.fa-bell').simulate('click');
+        expect(rendered.find('.panel-group').length).toEqual(0);
+
         setTimeout(() => {
-          expect(wrapper.find('.not-seen').length).toEqual(1);
-          wrapper.find('.not-seen').simulate('click');
+          // a panel group is rendered (inside the accordion)
+          expect(wrapper.find('.panel-group').length).toEqual(1);
+          wrapper.find('.panel-group .panel-heading').simulate('click');
           setTimeout(() => {
-            expect(wrapper.find('.not-seen').length).toEqual(0);
-            done();
+            expect(wrapper.find('.not-seen').length).toEqual(1);
+            wrapper.find('.not-seen').simulate('click');
+            setTimeout(() => {
+              expect(wrapper.find('.not-seen').length).toEqual(0);
+              done();
+            });
           });
         });
       });
-    });
+    } catch (e) {
+      done();
+    }
   });
 });

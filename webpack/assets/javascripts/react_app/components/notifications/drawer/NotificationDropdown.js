@@ -1,7 +1,7 @@
 import React from 'react';
 import { Dropdown, Glyphicon, MenuItem } from 'react-bootstrap';
 
-const NotificationDropdown = ({ links, id }) => {
+const NotificationDropdown = ({ links, id, onClickedLink }) => {
   return (
     <Dropdown pullRight className="dropdown-kebab-pf" id={id}>
       <Dropdown.Toggle noCaret bsStyle="link">
@@ -12,8 +12,7 @@ const NotificationDropdown = ({ links, id }) => {
           links.map((link, i) =>
             <MenuItem key={i}
                       id={ `notification-kebab-${i}` }
-                      target={link.external ? '_blank' : '_self'}
-                      href={link.href}>
+                      onClick={ onClickedLink.bind(this, link) }>
                 {link.title}
             </MenuItem>
           )

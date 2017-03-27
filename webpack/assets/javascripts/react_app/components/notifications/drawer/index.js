@@ -1,16 +1,13 @@
 import React from 'react';
 import NotificationsGroup from './notificationGroup';
-import {
-  NO_NOTIFICATIONS_MESSAGE,
-  NOTIFICATIONS_TITLE
-} from '../notifications.consts';
 
 export default (
   {
     notificationGroups,
     expandedGroup,
     onExpandGroup,
-    onMarkAsRead
+    onMarkAsRead,
+    onClickedLink
   }
 ) => {
   const groups = Object.keys(notificationGroups)
@@ -18,6 +15,7 @@ export default (
       <NotificationsGroup
         group={key}
         key={key}
+        onClickedLink={onClickedLink}
         onMarkAsRead={onMarkAsRead}
         isExpanded={expandedGroup === key}
         onExpand={onExpandGroup}
@@ -26,14 +24,14 @@ export default (
     ));
   const noNotificationsMessage = (
     <div id="no-notifications-container">
-      { __(NO_NOTIFICATIONS_MESSAGE) }
+      {__('No Notifications')}
     </div>
   );
 
   return (
     <div className="drawer-pf drawer-pf-notifications-non-clickable">
       <div className="drawer-pf-title">
-        <h3 className="text-center">{ __(NOTIFICATIONS_TITLE) }</h3>
+        <h3 className="text-center">{__('Notifications')}</h3>
       </div>
       <div className="panel-group" id="notification-drawer-accordion">
         {groups.length === 0 ? noNotificationsMessage : groups}

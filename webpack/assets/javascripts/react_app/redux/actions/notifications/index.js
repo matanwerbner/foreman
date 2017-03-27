@@ -4,28 +4,41 @@ import {
   NOTIFICATIONS_SET_EXPANDED_GROUP,
   NOTIFICATIONS_MARK_AS_READ
 } from '../../consts';
-import { notificationsDrawer } from '../../../common/sessionStorage';
+import {
+  notificationsDrawer as sessionStorage
+} from '../../../common/sessionStorage';
 import API from '../../../API';
 const getNotificationsInterval = 10000;
 
 export const getNotifications = url => dispatch => {
-  if (
-    document.visibilityState === 'visible' ||
-    document.visibilityState === 'prerender'
-  ) {
-    API.get(url).then(response => {
-      dispatch({
-        type: NOTIFICATIONS_GET_NOTIFICATIONS,
-        payload: {
-          notifications: response.notifications
-        }
-      });
+  new Promise((resolve, reject) => {
+    if (
+      document.visibilityState === 'visible' ||
+      document.visibilityState === 'prerender'
+    ) {
+      API.get(url).then(response => {
+        dispatch({
+          type: NOTIFICATIONS_GET_NOTIFICATIONS,
+          payload: {
+            notifications: response.notifications
+          }
+        });
+        resolve();
+      }, () => reject());
+    } else {
+      resolve();
+    }
+    return null;
+  }).then(
+    () => {
       setTimeout(
         () => dispatch(getNotifications(url)),
         getNotificationsInterval
       );
-    });
-  }
+    },
+    // error handling
+    () => {}
+  );
 };
 
 export const onMarkAsRead = (group, id) => dispatch => {
@@ -44,7 +57,7 @@ export const expandGroup = group => (dispatch, getState) => {
 
   const getNewExpandedGroup = () => currentExpanded === group ? '' : group;
 
-  notificationsDrawer.setExpandedGroup(getNewExpandedGroup());
+  sessionStorage.setExpandedGroup(getNewExpandedGroup());
   dispatch({
     type: NOTIFICATIONS_SET_EXPANDED_GROUP,
     payload: {
@@ -56,11 +69,16 @@ export const expandGroup = group => (dispatch, getState) => {
 export const toggleDrawer = () => (dispatch, getState) => {
   const isDrawerOpened = getState().notifications.isDrawerOpen;
 
-  notificationsDrawer.setIsOpened(!isDrawerOpened);
+  sessionStorage.setIsOpened(!isDrawerOpened);
   dispatch({
     type: NOTIFICATIONS_TOGGLE_DRAWER,
     payload: {
       value: !isDrawerOpened
     }
   });
+};
+
+export const onClickedLink = link => (dispatch, getState) => {
+  toggleDrawer()(dispatch, getState);
+  window.open(link.href, link.external ? '_blank' : '_self');
 };

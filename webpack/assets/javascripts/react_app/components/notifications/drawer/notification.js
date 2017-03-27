@@ -2,6 +2,7 @@ import React from 'react';
 import Icon from '../../common/Icon';
 import NotificationDropdown from './NotificationDropdown';
 import '../../../common/commonStyles.css';
+import { OverlayTrigger, Tooltip } from 'react-bootstrap';
 
 /* eslint-disable camelcase */
 
@@ -10,28 +11,27 @@ const Notification = (
     notification: {
       created_at,
       seen,
-      text = '-',
+      text,
       level,
       id,
       actions
     },
-    onMarkAsRead
+    onMarkAsRead,
+    onClickedLink
   }
 ) => {
   const created = new Date(created_at);
-  const title = __('Click to mark as read').toString();
-  const tooltip = {
-    title: title,
-    'data-toggle': 'tooltip',
-    'data-placement': 'top'
-  };
+  const title = __('Click to mark as read');
+  const tooltip = (
+    <Tooltip id="tooltip">{ title }</Tooltip>
+  );
   const markup = seen ?
     <span className="drawer-pf-notification-message">{text}</span> :
-    <span
-        {...tooltip}
-        className="drawer-pf-notification-message not-seen"
+    <span className="drawer-pf-notification-message not-seen"
         onClick={onMarkAsRead.bind(this, id)}>
-        { text }
+        <OverlayTrigger placement="top" overlay={tooltip}>
+        < span>{ text }</span>
+        </OverlayTrigger>
     </span>;
 
   return (
@@ -44,7 +44,12 @@ const Notification = (
         <span className="time">{created.toLocaleTimeString()}</span>
       </div>
       </div>
-      {actions.links && <NotificationDropdown links={actions.links} id={id} />}
+      {
+        actions.links &&
+        <NotificationDropdown links={actions.links}
+                              id={id}
+                              onClickedLink={onClickedLink}/>
+      }
     </div>
   );
 };

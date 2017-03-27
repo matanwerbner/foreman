@@ -1,7 +1,7 @@
 import React from 'react';
 import StatisticsChartsList from '../components/charts/StatisticsChartsList';
 import PowerStatus from '../components/hosts/powerStatus/';
-import NotificationDrawer from '../components/notifications/';
+import NotificationContainer from '../components/notifications/';
 import ReactDOM from 'react-dom';
 import store from '../redux';
 export function mount(component, selector, data) {
@@ -15,9 +15,9 @@ export function mount(component, selector, data) {
       type: PowerStatus,
       markup: <PowerStatus store={store} data={data}/>
     },
-    NotificationDrawer: {
-      type: NotificationDrawer,
-      markup: <NotificationDrawer store={store} data={data} />
+    NotificationContainer: {
+      type: NotificationContainer,
+      markup: <NotificationContainer store={store} data={data} />
     }
   };
 

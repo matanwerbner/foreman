@@ -18,15 +18,21 @@ export default (state = initialState, action) => {
 
   switch (action.type) {
     case NOTIFICATIONS_GET_NOTIFICATIONS:
-      return state.set('notifications', keyBy(payload.notifications, 'id'));
+      return state.set(
+        'notifications', payload.notifications
+      );
     case NOTIFICATIONS_TOGGLE_DRAWER:
       return state.set('isDrawerOpen', payload.value);
     case NOTIFICATIONS_SET_EXPANDED_GROUP:
       return state.set('expandedGroup', payload.group);
     case NOTIFICATIONS_MARK_AS_READ:
-      return state.setIn(
-        ['notifications', payload.id],
-        Object.assign({}, state.notifications[payload.id], { seen: true })
+      return state.set(
+        'notifications',
+        state.notifications.map(
+          n => n.id === payload.id ?
+            Object.assign({}, n, {seen: true}) :
+            n
+        )
       );
     default:
       return state;

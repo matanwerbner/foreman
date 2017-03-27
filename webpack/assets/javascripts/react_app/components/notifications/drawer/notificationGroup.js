@@ -7,7 +7,8 @@ export default (
     notifications,
     isExpanded,
     onExpand,
-    onMarkAsRead
+    onMarkAsRead,
+    onClickedLink
   }
 ) => {
   const className = `panel panel-default ${isExpanded ? 'expanded' : ''}`;
@@ -24,25 +25,24 @@ export default (
           </a>
         </h4>
         <span className="panel-counter">
-          {unreadCount} New {unreadCount !== 1 ? 'Events' : 'Event'}
+          {
+            `${unreadCount} ${unreadCount !== 1 ?
+              __('New Events') :
+              __('New Event')}`
+          }
         </span>
       </div>
-      {
-        isExpanded &&
+      {isExpanded &&
         <div className="panel-body">
-          {
-            notifications.map(
-              notification => (
-                <Notification
-                  key={notification.id}
-                  notification={notification}
-                  onMarkAsRead={onMarkAsRead.bind(this, group)}
-                />
-              )
-            )
-          }
-        </div>
-      }
+          { notifications.map(notification => (
+            <Notification
+              onClickedLink={onClickedLink}
+              key={notification.id}
+              notification={notification}
+              onMarkAsRead={onMarkAsRead.bind(this, group)}
+            />
+          ))}
+        </div>}
     </div>
   );
 };

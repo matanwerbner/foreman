@@ -7,10 +7,6 @@ import Drawer from './drawer/';
 import { groupBy, some, isUndefined } from 'lodash';
 
 class notificationContainer extends React.Component {
-  componentDidUpdate() {
-    window.tfm.tools.activateTooltips();
-  }
-
   componentDidMount() {
     const { getNotifications, data: { url } } = this.props;
 
@@ -26,7 +22,8 @@ class notificationContainer extends React.Component {
       expandedGroup,
       onMarkAsRead,
       hasUnreadMessages,
-      isReady
+      isReady,
+      onClickedLink
     } = this.props;
 
     return (
@@ -35,6 +32,7 @@ class notificationContainer extends React.Component {
         { isReady && isDrawerOpen &&
           <Drawer
             onExpandGroup={expandGroup}
+            onClickedLink={onClickedLink}
             onMarkAsRead={onMarkAsRead}
             expandedGroup={expandedGroup}
             notificationGroups={notifications}

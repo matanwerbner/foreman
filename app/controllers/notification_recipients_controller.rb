@@ -11,7 +11,8 @@ class NotificationRecipientsController < Api::V2::BaseController
       eager_load(:notification, :notification_blueprint)
 
     render :json => {
-      :notifications => @notifications.paginate(paginate_options).map(&:payload)
+      :notifications => @notifications.paginate(paginate_options).map(&:payload),
+      :total => @notifications.count
     }
   end
 
